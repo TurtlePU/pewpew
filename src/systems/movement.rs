@@ -1,6 +1,9 @@
-use amethyst::ecs::prelude::*;
-use amethyst::core::Transform;
-use crate::components::{Speed, Direction};
+use crate::components::{Direction, Speed};
+
+use amethyst::{
+    core::{Time, Transform},
+    ecs::prelude::*,
+};
 
 #[derive(Default)]
 pub struct MovementSystem {
@@ -10,12 +13,13 @@ pub struct MovementSystem {
 
 impl<'s> System<'s> for MovementSystem {
     type SystemData = (
+        Read<'s, Time>,
         ReadStorage<'s, Direction>,
         ReadStorage<'s, Speed>,
         WriteStorage<'s, Transform>,
     );
 
-    fn run(&mut self, (directions, speeds, mut locals): Self::SystemData) {
+    fn run(&mut self, (time, directions, speeds, mut locals): Self::SystemData) {
         self.dirty.clear();
         let events = directions.channel().read(self.reader.as_mut().unwrap());
         for event in events {
@@ -27,7 +31,8 @@ impl<'s> System<'s> for MovementSystem {
             if let Some(angle) = angle.angle {
                 // FIXME: collisions, etc.
                 let (sin, cos) = angle.sin_cos();
-                local.append_translation_xyz(speed.0 * cos, speed.0 * sin, 0.);
+                let abs = speed.0 * time.delta_seconds();
+                local.append_translation_xyz(abs * cos, abs * sin, 0.);
             }
         }
     }

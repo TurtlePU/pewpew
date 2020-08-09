@@ -1,11 +1,8 @@
-use amethyst::{
-    ecs::prelude::*,
-    input::InputHandler,
-};
+use amethyst::{ecs::prelude::*, input::InputHandler};
 
 use crate::{
-    input_bindings::{InputBindings, AxisBinding},
-    components::{Controlled, Direction}
+    components::{Controlled, Direction},
+    input_bindings::{AxisBinding, InputBindings},
 };
 
 pub struct ControlSystem;
@@ -28,11 +25,13 @@ impl<'s> System<'s> for ControlSystem {
 }
 
 fn get_delta(input: &InputHandler<InputBindings>) -> Option<(f32, f32)> {
-    let dx = input.axis_value(&AxisBinding::Horizontal);
-    let dy = input.axis_value(&AxisBinding::Vertical);
-    match (dx, dy) {
-        (Some(dx), dy) => Some((dx, dy.unwrap_or_default())),
-        (dx, Some(dy)) => Some((dx.unwrap_or_default(), dy)),
-        _ => None,
+    let dx = input
+        .axis_value(&AxisBinding::Horizontal)
+        .unwrap_or_default();
+    let dy = input.axis_value(&AxisBinding::Vertical).unwrap_or_default();
+    if dx != 0. || dy != 0. {
+        Some((dx, dy))
+    } else {
+        None
     }
 }

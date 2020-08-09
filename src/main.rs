@@ -1,12 +1,13 @@
-mod states;
+mod components;
 mod config;
 mod entities;
-mod components;
-mod systems;
 mod input_bindings;
+mod states;
+mod systems;
 
 use amethyst::{
     core::transform::TransformBundle,
+    input::InputBundle,
     prelude::*,
     renderer::{
         plugins::{RenderFlat2D, RenderToWindow},
@@ -14,15 +15,9 @@ use amethyst::{
         RenderingBundle,
     },
     utils::application_root_dir,
-    input::InputBundle,
 };
 
-use crate::{
-    input_bindings::InputBindings,
-    states::GameState,
-    config::PewPewConfig,
-    systems::*,
-};
+use crate::{config::PewPewConfig, input_bindings::InputBindings, states::GameState, systems::*};
 
 fn main() -> amethyst::Result<()> {
     amethyst::start_logger(Default::default());
@@ -33,11 +28,13 @@ fn main() -> amethyst::Result<()> {
     let config_dir = app_root.join("config");
     let display_config_path = config_dir.join("display.ron");
 
+    let pew_config = PewPewConfig::load(config_dir.join("config.ron"))?;
+
     let input_bundle = InputBundle::<InputBindings>::new()
         .with_bindings_from_file(config_dir.join("bindings.ron"))?;
 
-    let render_to_window = RenderToWindow::from_config_path(display_config_path)?
-        .with_clear([0.34, 0.36, 0.52, 1.0]);
+    let render_to_window =
+        RenderToWindow::from_config_path(display_config_path)?.with_clear(pew_config.bg_color);
 
     let rendering_bundle = RenderingBundle::<DefaultBackend>::new()
         .with_plugin(render_to_window)
@@ -48,9 +45,12 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(rendering_bundle)?
         .with_bundle(TransformBundle::new())?
         .with(ControlSystem, "control_system", &["input_system"])
-        .with(MovementSystem::default(), "movement_system", &["control_system"]);
+        .with(
+            MovementSystem::default(),
+            "movement_system",
+            &["control_system"],
+        );
 
-    let pew_config = PewPewConfig::load(config_dir.join("config.ron"))?;
     let state = GameState::new(pew_config);
 
     let mut game = Application::new(assets_dir, state, game_data)?;

@@ -1,5 +1,5 @@
 use amethyst::{
-    core::{Transform, Parent},
+    core::{Parent, Transform},
     ecs::prelude::*,
     renderer::Camera,
 };
