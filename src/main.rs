@@ -1,7 +1,9 @@
+mod states;
+mod config;
+mod entities;
 mod components;
 mod systems;
 mod input_bindings;
-mod pewpew;
 
 use amethyst::{
     core::transform::TransformBundle,
@@ -12,12 +14,13 @@ use amethyst::{
         RenderingBundle,
     },
     utils::application_root_dir,
-    input::InputBundle
+    input::InputBundle,
 };
 use crate::{
     input_bindings::InputBindings,
-    pewpew::MyState
+    states::GameState,
 };
+use crate::config::PewPewConfig;
 
 fn main() -> amethyst::Result<()> {
     amethyst::start_logger(Default::default());
@@ -44,7 +47,10 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(TransformBundle::new())?
         .with(systems::ControlSystem, "control_system", &["input_system"]);
 
-    let mut game = Application::new(assets_dir, MyState, game_data)?;
+    let pew_config = PewPewConfig::load(config_dir.join("config.ron"))?;
+    let state = GameState::new(pew_config);
+
+    let mut game = Application::new(assets_dir, state, game_data)?;
     game.run();
 
     Ok(())
