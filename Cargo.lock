@@ -212,7 +212,7 @@ dependencies = [
  "fnv",
  "getset",
  "log",
- "nalgebra",
+ "nalgebra 0.19.0",
  "num-traits 0.2.12",
  "rayon",
  "serde",
@@ -1136,6 +1136,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "fixedbitset"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "37ab347416e802de484e4d03c7316c48f1ecb56574dfd4a46a80f173ce1de04d"
+
+[[package]]
 name = "float-ord"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1451,6 +1457,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "hashbrown"
+version = "0.8.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e91b62f79061a0bc2e046024cb7ba44b08419ed238ecbd9adbd787434b9e8c25"
+dependencies = [
+ "autocfg 1.0.0",
+]
+
+[[package]]
 name = "heck"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1517,6 +1532,16 @@ dependencies = [
  "png 0.15.3",
  "scoped_threadpool",
  "tiff 0.3.1",
+]
+
+[[package]]
+name = "indexmap"
+version = "1.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "86b45e59b16c76b11bf9738fd5d38879d3bd28ad292d7b313608becb17ae2df9"
+dependencies = [
+ "autocfg 1.0.0",
+ "hashbrown 0.8.2",
 ]
 
 [[package]]
@@ -1903,6 +1928,43 @@ dependencies = [
 ]
 
 [[package]]
+name = "nalgebra"
+version = "0.21.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d6b6147c3d50b4f3cdabfe2ecc94a0191fd3d6ad58aefd9664cf396285883486"
+dependencies = [
+ "approx 0.3.2",
+ "generic-array",
+ "matrixmultiply",
+ "num-complex 0.2.4",
+ "num-rational 0.2.4",
+ "num-traits 0.2.12",
+ "rand 0.7.3",
+ "rand_distr",
+ "simba",
+ "typenum",
+]
+
+[[package]]
+name = "ncollide2d"
+version = "0.23.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f8ac5be202a88b303e05a289a86783fa618eb3d7730dda35641fd0db6693d0dc"
+dependencies = [
+ "approx 0.3.2",
+ "bitflags",
+ "downcast-rs",
+ "either",
+ "nalgebra 0.21.1",
+ "num-traits 0.2.12",
+ "petgraph",
+ "simba",
+ "slab",
+ "slotmap",
+ "smallvec 1.4.1",
+]
+
+[[package]]
 name = "nix"
 version = "0.14.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2236,10 +2298,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d4fd5641d01c8f18a23da7b6fe29298ff4b55afcccdf78973b24cf3175fee32e"
 
 [[package]]
+name = "petgraph"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "467d164a6de56270bd7c4d070df81d07beace25012d5103ced4e9ff08d6afdb7"
+dependencies = [
+ "fixedbitset",
+ "indexmap",
+]
+
+[[package]]
 name = "pewpew"
 version = "0.1.0"
 dependencies = [
  "amethyst",
+ "ncollide2d",
  "serde",
 ]
 
@@ -3227,7 +3300,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c5f08237e667ac94ad20f8878b5943d91a93ccb231428446c57c21c57779016d"
 dependencies = [
  "arrayvec 0.5.1",
- "hashbrown",
+ "hashbrown 0.7.2",
  "mopa",
  "rayon",
  "shred-derive",
@@ -3253,6 +3326,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b5752e017e03af9d735b4b069f53b7a7fd90fefafa04d8bd0c25581b0bff437f"
 
 [[package]]
+name = "simba"
+version = "0.1.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fb931b1367faadea6b1ab1c306a860ec17aaa5fa39f367d0c744e69d971a1fb2"
+dependencies = [
+ "approx 0.3.2",
+ "num-complex 0.2.4",
+ "num-traits 0.2.12",
+ "paste",
+]
+
+[[package]]
 name = "siphasher"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3274,6 +3359,12 @@ dependencies = [
  "mach",
  "winapi",
 ]
+
+[[package]]
+name = "slotmap"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c46a3482db8f247956e464d783693ece164ca056e6e67563ee5505bdb86452cd"
 
 [[package]]
 name = "smallvec"
@@ -3318,7 +3409,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fff28a29366aff703d5da8a7e2c8875dc8453ac1118f842cbc0fa70c7db51240"
 dependencies = [
  "crossbeam-queue 0.2.3",
- "hashbrown",
+ "hashbrown 0.7.2",
  "hibitset",
  "log",
  "rayon",

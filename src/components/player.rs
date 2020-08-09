@@ -1,4 +1,4 @@
-use amethyst::core::ecs::{Component, NullStorage};
+use amethyst::ecs::{Component, NullStorage};
 
 #[derive(Default)]
 pub struct Player;

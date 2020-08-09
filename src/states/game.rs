@@ -2,8 +2,9 @@ use amethyst::{
     SimpleState,
     StateData,
     GameData,
-    core::ecs::WorldExt
+    ecs::WorldExt,
 };
+
 use crate::{
     components::Player,
     entities::{init_player, init_camera},
@@ -24,7 +25,7 @@ impl SimpleState for GameState {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
         let StateData { world, .. } = data;
         world.register::<Player>();
-        init_player(world);
-        init_camera(world, &self.config.camera_fov);
+        let player = init_player(world, 1.);
+        init_camera(world, player, &self.config.camera_fov);
     }
 }
