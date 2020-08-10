@@ -2,6 +2,7 @@ mod components;
 mod config;
 mod entities;
 mod input_bindings;
+mod level;
 mod states;
 mod systems;
 
@@ -17,6 +18,7 @@ use amethyst::{
     utils::application_root_dir,
 };
 
+use crate::level::LevelConfig;
 use crate::{config::PewPewConfig, input_bindings::InputBindings, states::GameState, systems::*};
 
 fn main() -> amethyst::Result<()> {
@@ -51,7 +53,9 @@ fn main() -> amethyst::Result<()> {
             &["control_system"],
         );
 
-    let state = GameState::new(pew_config);
+    let level_config = LevelConfig::load(assets_dir.join("prefab/level.ron"))?;
+
+    let state = GameState::new(pew_config, level_config);
 
     let mut game = Application::new(assets_dir, state, game_data)?;
     game.run();

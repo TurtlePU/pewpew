@@ -2,4 +2,5 @@
     camera_fov: (256., 256.),
     bg_color: (0., 0., 0., 1.),
     player_speed: 10.,
+    unit_width: 20.,
 )

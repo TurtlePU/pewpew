@@ -5,4 +5,5 @@ pub struct PewPewConfig {
     pub camera_fov: (f32, f32),
     pub bg_color: [f32; 4],
     pub player_speed: f32,
+    pub unit_width: f32,
 }

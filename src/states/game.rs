@@ -9,16 +9,18 @@ use amethyst::{
 use crate::{
     components::Player,
     config::PewPewConfig,
-    entities::{init_camera, init_player},
+    entities::{init_camera, init_level_entity, init_player},
+    level::LevelConfig,
 };
 
 pub struct GameState {
     config: PewPewConfig,
+    level: LevelConfig,
 }
 
 impl GameState {
-    pub fn new(config: PewPewConfig) -> Self {
-        Self { config }
+    pub fn new(config: PewPewConfig, level: LevelConfig) -> Self {
+        Self { config, level }
     }
 }
 
@@ -29,6 +31,9 @@ impl SimpleState for GameState {
         let sprite_sheet = load_sprite_sheet(world);
         let player = init_player(world, self.config.player_speed, sprite_sheet.clone());
         init_camera(world, player, &self.config.camera_fov);
+        for entity in self.level.gen_level() {
+            init_level_entity(world, sprite_sheet.clone(), self.config.unit_width, entity);
+        }
         draw_square(world, sprite_sheet);
     }
 }
