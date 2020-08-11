@@ -27,12 +27,12 @@ impl<'s> System<'s> for MovementSystem {
                 self.dirty.add(*id);
             }
         }
-        for (_, angle, speed, local) in (&self.dirty, &directions, &speeds, &mut locals).join() {
-            if let Some(angle) = angle.angle {
+        for (_, dir, speed, local) in (&self.dirty, &directions, &speeds, &mut locals).join() {
+            if let Some(angle) = dir.angle {
                 // FIXME: collisions, etc.
                 let (sin, cos) = angle.sin_cos();
                 let abs = speed.0 * time.delta_seconds();
-                local.append_translation_xyz(abs * cos, abs * sin, 0.);
+                local.append_translation_xyz((abs * cos).round(), (abs * sin).round(), 0.);
             }
         }
     }

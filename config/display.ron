@@ -1,4 +1,5 @@
+#![enable(implicit_some)]
 (
   title: "pewpew",
-  dimensions: Some((500, 500)),
+  dimensions: (1920, 1080),
 )

@@ -1,6 +1,6 @@
 (
-    camera_fov: (256., 256.),
+    camera_fov: (480., 270.),
     bg_color: (0., 0., 0., 1.),
-    player_speed: 10.,
-    unit_width: 20.,
+    player_speed: 128.,
+    unit_width: 32.,
 )

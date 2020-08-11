@@ -20,18 +20,28 @@ impl LevelConfig {
             let x = height.sample(&mut rng);
             let y = width.sample(&mut rng);
             if x != 0 || y != 0 {
-                break (x, y);
+                break (x as f32, y as f32);
             }
         };
-        vec![LevelEntity {
-            pos,
-            kind: LevelEntityKind::Exit,
-        }]
+        vec![
+            LevelEntity {
+                pos,
+                kind: LevelEntityKind::Exit,
+            },
+            LevelEntity {
+                pos: (0., 0.),
+                kind: LevelEntityKind::Wall,
+            },
+            LevelEntity {
+                pos: (1., 0.),
+                kind: LevelEntityKind::Wall,
+            },
+        ]
     }
 }
 
 pub struct LevelEntity {
-    pub pos: (isize, isize),
+    pub pos: (f32, f32),
     pub kind: LevelEntityKind,
 }
 

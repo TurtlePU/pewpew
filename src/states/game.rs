@@ -1,8 +1,7 @@
 use amethyst::{
     assets::{AssetStorage, Handle, Loader},
-    core::Transform,
     ecs::prelude::*,
-    renderer::{ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
+    renderer::{ImageFormat, SpriteSheet, SpriteSheetFormat, Texture},
     GameData, SimpleState, StateData,
 };
 
@@ -34,7 +33,6 @@ impl SimpleState for GameState {
         for entity in self.level.gen_level() {
             init_level_entity(world, sprite_sheet.clone(), self.config.unit_width, entity);
         }
-        draw_square(world, sprite_sheet);
     }
 }
 
@@ -58,16 +56,4 @@ fn load_sprite_sheet(world: &mut World) -> Handle<SpriteSheet> {
         (),
         &sprite_sheet_store,
     )
-}
-
-fn draw_square(world: &mut World, sprite_sheet: Handle<SpriteSheet>) -> Entity {
-    let sprite_render = SpriteRender {
-        sprite_sheet,
-        sprite_number: 1,
-    };
-    world
-        .create_entity()
-        .with(Transform::default())
-        .with(sprite_render)
-        .build()
 }

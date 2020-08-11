@@ -15,11 +15,13 @@ use amethyst::{
         types::DefaultBackend,
         RenderingBundle,
     },
-    utils::application_root_dir,
+    utils::{application_root_dir, ortho_camera::CameraOrthoSystem},
 };
 
-use crate::level::LevelConfig;
-use crate::{config::PewPewConfig, input_bindings::InputBindings, states::GameState, systems::*};
+use crate::{
+    config::PewPewConfig, input_bindings::InputBindings, level::LevelConfig, states::GameState,
+    systems::*,
+};
 
 fn main() -> amethyst::Result<()> {
     amethyst::start_logger(Default::default());
@@ -46,7 +48,9 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(input_bundle)?
         .with_bundle(rendering_bundle)?
         .with_bundle(TransformBundle::new())?
+        .with(CameraOrthoSystem, "camera_ortho_system", &[])
         .with(ControlSystem, "control_system", &["input_system"])
+        .with(CameraSystem, "camera_system", &["input_system"])
         .with(
             MovementSystem::default(),
             "movement_system",
