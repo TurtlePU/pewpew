@@ -1,7 +1,11 @@
-use amethyst::{ecs::prelude::*, input::InputHandler};
+use amethyst::{
+    core::{Time, Transform},
+    ecs::prelude::*,
+    input::InputHandler,
+};
 
 use crate::{
-    components::{Controlled, Direction},
+    components::{Controlled, Speed},
     input_bindings::{AxisBinding, InputBindings},
 };
 
@@ -10,15 +14,22 @@ pub struct ControlSystem;
 impl<'s> System<'s> for ControlSystem {
     type SystemData = (
         Read<'s, InputHandler<InputBindings>>,
+        Read<'s, Time>,
         ReadStorage<'s, Controlled>,
-        WriteStorage<'s, Direction>,
+        ReadStorage<'s, Speed>,
+        WriteStorage<'s, Transform>,
     );
 
-    fn run(&mut self, (input, controlled, mut directions): Self::SystemData) {
+    fn run(&mut self, (input, time, controlled, speeds, mut locals): Self::SystemData) {
         if let Some((dx, dy)) = get_delta(&input) {
-            let angle = dy.atan2(dx);
-            for (_, direction) in (&controlled, &mut directions).join() {
-                direction.angle = Some(angle);
+            let (mut dy, mut dx) = dy.atan2(dx).sin_cos();
+            let sec = time.delta_seconds();
+            dx *= sec;
+            dy *= sec;
+            for (_, &Speed(speed), local) in (&controlled, &speeds, &mut locals).join() {
+                let x = dx * speed;
+                let y = dy * speed;
+                local.append_translation_xyz(x, y, 0.);
             }
         }
     }

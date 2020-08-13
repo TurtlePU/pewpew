@@ -1,11 +1,11 @@
-use crate::level::{LevelEntity, LevelEntityKind::*};
-
 use amethyst::{
     assets::Handle,
     core::Transform,
     ecs::prelude::*,
     renderer::{SpriteRender, SpriteSheet},
 };
+
+use crate::level::{LevelEntity, LevelEntityKind::*};
 
 pub fn init_level_entity(
     world: &mut World,

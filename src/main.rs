@@ -1,11 +1,3 @@
-mod components;
-mod config;
-mod entities;
-mod input_bindings;
-mod level;
-mod states;
-mod systems;
-
 use amethyst::{
     core::transform::TransformBundle,
     input::InputBundle,
@@ -22,6 +14,14 @@ use crate::{
     config::PewPewConfig, input_bindings::InputBindings, level::LevelConfig, states::GameState,
     systems::*,
 };
+
+mod components;
+mod config;
+mod entities;
+mod input_bindings;
+mod level;
+mod states;
+mod systems;
 
 fn main() -> amethyst::Result<()> {
     amethyst::start_logger(Default::default());
@@ -50,12 +50,7 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(TransformBundle::new())?
         .with(CameraOrthoSystem, "camera_ortho_system", &[])
         .with(ControlSystem, "control_system", &["input_system"])
-        .with(CameraSystem, "camera_system", &["input_system"])
-        .with(
-            MovementSystem::default(),
-            "movement_system",
-            &["control_system"],
-        );
+        .with(CameraSystem, "camera_system", &["input_system"]);
 
     let level_config = LevelConfig::load(assets_dir.join("prefab/level.ron"))?;
 

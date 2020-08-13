@@ -1,6 +1,7 @@
+use std::fmt;
+
 use amethyst::input::BindingTypes;
 use serde::{Deserialize, Serialize};
-use std::fmt;
 
 #[derive(Hash, Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
 pub enum AxisBinding {

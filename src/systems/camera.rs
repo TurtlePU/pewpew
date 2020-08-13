@@ -1,9 +1,9 @@
-use crate::input_bindings::InputBindings;
-
 use amethyst::{
     core::Transform, ecs::prelude::*, input::InputHandler, utils::ortho_camera::CameraOrtho,
     window::ScreenDimensions,
 };
+
+use crate::input_bindings::InputBindings;
 
 pub struct CameraSystem;
 
