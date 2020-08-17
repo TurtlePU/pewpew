@@ -54,10 +54,11 @@ fn main() -> amethyst::Result<()> {
         .with(ControlSystem, "control_system", &["input_system"])
         .with(CameraSystem, "camera_system", &["input_system"])
         .with(WallBodySystem, "wall_body_system", &["control_system"])
+        .with(HitSystem, "hit_system", &["control_system"])
         .with_system_desc(
             SyncFootPrintsDesc,
             "sync_footprints_system",
-            &["wall_body_system"],
+            &["wall_body_system", "hit_system"],
         )
         .with_system_desc(
             FixTransformDesc,

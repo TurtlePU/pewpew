@@ -36,6 +36,10 @@ impl<'s> ToiObject<'s> {
         (fix, FootPrint(new_iso))
     }
 
+    pub fn end(&self) -> FootPrint {
+        FootPrint(self.motion.end.clone())
+    }
+
     pub fn toi(&self, rhs: &ToiObject<'_>) -> Option<TOI<f32>> {
         query::nonlinear_time_of_impact(&self.motion, self.shape, &rhs.motion, rhs.shape, 1., 0.)
     }
