@@ -4,8 +4,12 @@ use amethyst::{
     ecs::prelude::*,
     renderer::{SpriteRender, SpriteSheet},
 };
+use ncollide2d::{nalgebra::Vector2, shape::Cuboid};
 
-use crate::level::{LevelEntity, LevelEntityKind::*};
+use crate::{
+    components::Geometry,
+    level::{LevelEntity, LevelEntityKind::*},
+};
 
 pub fn init_level_entity(
     world: &mut World,
@@ -25,9 +29,13 @@ pub fn init_level_entity(
     let x = entity.pos.0 as f32 * unit;
     let y = entity.pos.1 as f32 * unit;
     transform.set_translation_xyz(x, y, 0.);
-    world
-        .create_entity()
-        .with(transform)
-        .with(sprite_render)
-        .build()
+    let mut builder = world.create_entity().with(transform).with(sprite_render);
+    if let Wall = entity.kind {
+        builder = builder
+            .with(crate::components::Wall)
+            .with(Geometry::from(Cuboid::new(
+                (0.5 * unit - 1.) * Vector2::new(1., 1.),
+            )));
+    }
+    builder.build()
 }

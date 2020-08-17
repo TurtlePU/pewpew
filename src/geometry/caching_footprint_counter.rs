@@ -26,11 +26,12 @@ impl<'s, 't> CachingFootPrintCounter<'s, 't> {
     }
 
     fn count_impl(&mut self, entity: Entity) -> Isometry3<f32> {
-        let local = self.local_iso(entity);
-        self.parent_iso(entity)
-            .and_then(|parent| Some(parent * local?))
-            .or(local)
-            .unwrap_or_else(Isometry3::<f32>::identity)
+        match (self.parent_iso(entity), self.local_iso(entity)) {
+            (Some(parent), Some(local)) => parent * local,
+            (Some(parent), None) => parent,
+            (None, Some(local)) => local,
+            _ => Isometry3::identity(),
+        }
     }
 
     fn local_iso(&mut self, entity: Entity) -> Option<Isometry3<f32>> {

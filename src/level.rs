@@ -10,15 +10,15 @@ impl LevelConfig {
     pub fn gen_level(&self) -> Vec<LevelEntity> {
         vec![
             LevelEntity {
-                pos: (0., 2.),
+                pos: (0., 3.),
                 kind: LevelEntityKind::Exit,
             },
             LevelEntity {
-                pos: (0., 1.),
+                pos: (0., 2.),
                 kind: LevelEntityKind::Wall,
             },
             LevelEntity {
-                pos: (1., 0.),
+                pos: (2., 0.),
                 kind: LevelEntityKind::Wall,
             },
         ]

@@ -4,11 +4,12 @@ use amethyst::{
     renderer::{ImageFormat, SpriteSheet, SpriteSheetFormat, Texture},
     GameData, SimpleState, StateData,
 };
+use ncollide2d::shape::Ball;
 
 use crate::{
     components::Player,
     config::PewPewConfig,
-    entities::{init_camera, init_level_entity, init_player},
+    entities::{init_camera, init_level_entity, init_player, init_player_body},
     level::LevelConfig,
 };
 
@@ -29,9 +30,11 @@ impl SimpleState for GameState {
         world.register::<Player>();
         let sprite_sheet = load_sprite_sheet(world);
         let player = init_player(world, self.config.player_speed, sprite_sheet.clone());
+        let unit = self.config.unit_width;
+        init_player_body(world, player, Ball::new(0.5 * unit));
         init_camera(world, player, &self.config.camera_fov);
         for entity in self.level.gen_level() {
-            init_level_entity(world, sprite_sheet.clone(), self.config.unit_width, entity);
+            init_level_entity(world, sprite_sheet.clone(), unit, entity);
         }
     }
 }

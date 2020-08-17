@@ -18,6 +18,8 @@ use crate::{
 mod components;
 mod config;
 mod entities;
+mod events;
+mod geometry;
 mod input_bindings;
 mod level;
 mod states;
@@ -50,7 +52,18 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(TransformBundle::new())?
         .with(CameraOrthoSystem, "camera_ortho_system", &[])
         .with(ControlSystem, "control_system", &["input_system"])
-        .with(CameraSystem, "camera_system", &["input_system"]);
+        .with(CameraSystem, "camera_system", &["input_system"])
+        .with(WallBodySystem, "wall_body_system", &["control_system"])
+        .with_system_desc(
+            SyncFootPrintsDesc,
+            "sync_footprints_system",
+            &["wall_body_system"],
+        )
+        .with_system_desc(
+            FixTransformDesc,
+            "fix_transform_system",
+            &["wall_body_system"],
+        );
 
     let level_config = LevelConfig::load(assets_dir.join("prefab/level.ron"))?;
 

@@ -1,6 +1,7 @@
 use amethyst::ecs::Entity;
 use ncollide2d::{
     interpolation::{InterpolatedRigidMotion, RigidMotion},
+    nalgebra::Isometry2,
     query::{self, TOI},
     shape::Shape,
 };
@@ -23,14 +24,16 @@ impl<'s> ToiObject<'s> {
     pub fn build(
         entity: Entity,
         geometry: &'s Geometry,
-        footprint: &FootPrint,
+        footprint: &'s FootPrint,
         counter: &mut impl FootPrintCounter,
     ) -> Self {
         Self::new(geometry, footprint, FootPrint::new(entity, counter))
     }
 
-    pub fn interpolate(&self, time: f32) -> FootPrint {
-        FootPrint(self.motion.position_at_time(time))
+    pub fn interpolate(&self, time: f32) -> (Isometry2<f32>, FootPrint) {
+        let new_iso = self.motion.position_at_time(time);
+        let fix = self.motion.end.inverse() * new_iso.clone();
+        (fix, FootPrint(new_iso))
     }
 
     pub fn toi(&self, rhs: &ToiObject<'_>) -> Option<TOI<f32>> {

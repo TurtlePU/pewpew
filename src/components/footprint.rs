@@ -1,4 +1,7 @@
-use amethyst::{core::math::Isometry3, ecs::prelude::*};
+use amethyst::{
+    core::math::{ComplexField, Isometry3, Vector3},
+    ecs::prelude::*,
+};
 use ncollide2d::nalgebra::{Isometry2, Vector2};
 
 #[derive(Clone)]
@@ -19,6 +22,16 @@ impl From<Isometry3<f32>> for FootPrint {
         let tl = iso.translation;
         let (_, _, angle) = iso.rotation.euler_angles();
         Self(Isometry2::new(Vector2::new(tl.x, tl.y), angle))
+    }
+}
+
+impl Into<Isometry3<f32>> for &FootPrint {
+    fn into(self) -> Isometry3<f32> {
+        let tr = &self.0.translation;
+        Isometry3::new(
+            Vector3::new(tr.x, tr.y, 0.),
+            Vector3::new(0., 0., self.0.rotation.argument()),
+        )
     }
 }
 
